@@ -45,14 +45,14 @@ router.route('/login').post((req, res) => {
                 return res.status(201).json({
                     code: '1000',
                     message: 'OK',
-                    data:token
+                    data: token
                 });
             }
         }
-        if(!ok){
+        if (!ok) {
             res.json({
-                code:9994,
-                message:"No data"
+                code: 9994,
+                message: "No data"
             })
         }
     })
