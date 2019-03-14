@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt-nodejs');
 var User = require('../models/user');
-var Product = require('../models/product');
-var Order = require('../models/order');
+
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
@@ -58,9 +57,9 @@ router.route('/login').post((req, res) => {
     })
 });
 //2
-router.route('/singup').post((req, res) => {
+router.route('/signup').post((req, res) => {
     User.findOne({
-        phone: req.body.phone
+        email: req.body.email
     }, (err, ok) => {
         if (err) res.json({ code: 1005, message: "Unknow err" });
         if (ok) {
@@ -71,7 +70,7 @@ router.route('/singup').post((req, res) => {
         }
         if (!ok) {
             let user = new User();
-            user.phone = req.user.phone;
+            user.email = req.email;
             user.pass = bcrypt.hashSync(req.body.pass);
             user.time = new Date();
             user.avate = "https://images-na.ssl-images-amazon.com/images/I/51%2BJZUHDnPL.jpg"
