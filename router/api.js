@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt-nodejs');
-var User = require('../models/user');
-
+let User = require('../models/user');
+let Question=require('../models/question')
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
@@ -70,7 +70,7 @@ router.route('/signup').post((req, res) => {
         }
         if (!ok) {
             let user = new User();
-            user.email = req.email;
+            user.email = req.body.email;
             user.pass = bcrypt.hashSync(req.body.pass);
             user.time = new Date();
             user.avate = "https://images-na.ssl-images-amazon.com/images/I/51%2BJZUHDnPL.jpg"
@@ -86,4 +86,33 @@ router.route('/signup').post((req, res) => {
 
 })
 //3
+router.route("/question").post((req,res)=>{
+    let rs=  Question.find({
+    }
+    ).limit(10).select('question answer').
+    then(ok=>{
+        console.log(ok)
+        res.json(ok)
+    })
+
+    // console.log(rs)
+})
+router.route('/create_question').post((req,res)=>{
+    console.log(req.body)
+    let que= new Question();
+    que.question=req.body.question;
+    que.correct_answer=req.body.correct_answer;
+    que.answer=req.body.answer;
+    que.create_at=new Date();
+    que.subject=req.body.subject;
+    console.log(que)
+    que.save((err)=>{
+        console.log(err);
+        res.json({
+            message:"ok"
+        })
+    });
+ 
+    
+})
 module.exports = router;

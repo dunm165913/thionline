@@ -19,4 +19,4 @@ var examSchema = mongoose.Schema({
         type:Array
     }
 });
-module.exports = mongoose.model('products', examSchema);
+module.exports = mongoose.model('exams', examSchema);

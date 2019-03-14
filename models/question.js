@@ -12,5 +12,11 @@ var questionSchema = new mongoose.Schema({
     level: {
         type: String
     },
+    create_at:{
+        type:Date
+    },
+    subject:{
+        type:String
+    }
 });
-module.exports = mongoose.model('orders', questionSchema);
+module.exports = mongoose.model('questions', questionSchema);
