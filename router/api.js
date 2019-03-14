@@ -92,7 +92,9 @@ router.route("/question").post((req,res)=>{
     ).limit(10).select('question answer').
     then(ok=>{
         console.log(ok)
-        res.json(ok)
+        res.json({
+            data:ok
+        })
     })
 
     // console.log(rs)
