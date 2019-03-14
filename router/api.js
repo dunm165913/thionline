@@ -25,7 +25,7 @@ function xoadau(str) {
 //1
 router.route('/login').post((req, res) => {
     User.findOne({
-        phone: req.body.phone
+        email: req.body.email
     }, (err, ok) => {
         if (err) res.json({ code: 1005, message: "Unknow err" });
         if (ok) {
