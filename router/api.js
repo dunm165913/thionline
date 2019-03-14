@@ -44,7 +44,8 @@ router.route('/login').post((req, res) => {
                 return res.status(201).json({
                     code: '1000',
                     message: 'OK',
-                    data: token
+                    data: token,
+                    name:ok.name,
                 });
             }
         }
