@@ -24,6 +24,7 @@ function xoadau(str) {
 
 //1
 router.route('/login').post((req, res) => {
+    console.log(req.body)
     User.findOne({
         email: req.body.email
     }, (err, ok) => {
@@ -33,7 +34,7 @@ router.route('/login').post((req, res) => {
                 // console.log(ok);
                 const token = jwt.sign({
                     // them 1 so truong khi deploy
-                    phone: req.body.phone,
+                    email: req.body.email,
 
                 },
                     "webserver",
@@ -52,7 +53,9 @@ router.route('/login').post((req, res) => {
         if (!ok) {
             res.json({
                 code: 9994,
-                message: "No data"
+                message: "No data",
+                data:"",
+                name:""
             })
         }
     })
