@@ -20,10 +20,5 @@ var userSchema = mongoose.Schema({
 
 });
 
-userSchema.methods.generateHash = function(pass){
-    return bcrypt.hashSync(pass,bcrypt.genSaltSync(8),null);
-};
-userSchema.methods.validPassword = function(pass){
-    return bcrypt.compareSync(pass, this.pass);
-};
+
 module.exports = mongoose.model('user',userSchema); 

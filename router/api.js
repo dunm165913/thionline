@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt-nodejs');
 let User = require('../models/user');
 let Question = require('../models/question')
+let Exam = require('../models/exam')
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
@@ -212,38 +213,72 @@ router.route('/created_exam_fee').post((req, res) => {
         })
     }
 })
-router.route('/next_question').post((req,res)=>{
-    Question.aggregate([{$sample:{size:1}}]).exec((err,ok)=>{
+router.route('/next_question').post((req, res) => {
+    Question.aggregate([{ $sample: { size: 1 } }]).exec((err, ok) => {
         res.json({
-            code:1000,
-            message:"ok",
-            data:ok
+            code: 1000,
+            message: "ok",
+            data: ok
         })
     })
 })
 
-router.route('/check_question').post((req,res)=>{
-   let a=req.body.answer
-   a=a.split(' :')
-     Question.findOne({
-        _id:req.body.id_question,
-        correct_answer:a[1]
-    },((err,ok)=>{
-        if(err) throw err;
+router.route('/check_question').post((req, res) => {
+    let a = req.body.answer
+    a = a.split(' :')
+    Question.findOne({
+        _id: req.body.id_question,
+        correct_answer: a[1]
+    }, ((err, ok) => {
+        if (err) throw err;
 
         console.log(a)
-        if(ok) res.json({
-            code:1000,
-            message:"Chinh Xac"
+        if (ok) res.json({
+            code: 1000,
+            message: "Chinh Xac"
         })
         else res.json({
-            code:1000,
-            message:"Oh!! Ban chua chinh xac"
+            code: 1000,
+            message: "Oh!! Ban chua chinh xac"
         })
     }))
 })
 router.route('/test').post((req, res) => {
     console.log(exam)
     res.json({})
+})
+router.route('/check_code_exam').post((req, res) => {
+    if (!req.userData) res.json({
+        code: 9999,
+        message: "loi  xac thuc"
+    })
+    else {
+        console.log(req.body)
+
+        Exam.find({
+          _id: req.body.code
+        }, (err, re) => {
+            console.log(re)
+            if (err)
+            res.json({
+                code: 9999,
+                message: " ma de thi ko hop le"
+            })
+            else if (re) {
+                res.json({
+                    code: 1000,
+                    message: "ok"
+
+                })
+            }
+            else {
+                res.json({
+                    code: 9999,
+                    message: "Khong ton tai de thi nay"
+                })
+            }
+        })
+
+    }
 })
 module.exports = router;
