@@ -256,26 +256,41 @@ router.route('/check_result').post((req, res) => {
         })
     }
     else {
-        Exam.find({
-            _id: req.body.id_exam
-        }).select('correct_answer').exec((err, ok) => {
-            if (err) throw err;
-            let resu = 0;
-            for (let i = 0; i < 50; i++) {
+        if (req.body.id_exam.match(/^[0-9a-fA-F]{24}$/))
+            Exam.find({
+                _id: req.body.id_exam
+            }).select('correct_answer').exec((err, ok) => {
+                if (err) throw err;
+                let resu = 0;
+                if (ok.length == 1) {
+                    for (let i = 0; i < 50; i++) {
 
-                try {
-                   
-                    if (req.body.result[i].answer.split(" :")[1] == ok[0].correct_answer[i].correct_answer) resu++
-                }
-                catch (err) {
+                        try {
 
+                            if (req.body.result[i].answer.split(" :")[1] == ok[0].correct_answer[i].correct_answer) resu++
+                        }
+                        catch (err) {
+
+                        }
+                    }
+                    res.json({
+                        code: 1000,
+                        message: resu + "/50"
+                    })
+                } else {
+                    res.json({
+                        code: 9999,
+                        message: "Loi tham so"
+                    })
                 }
-            }
-            res.json({
-                code: 1000,
-                message: resu + "/50"
+
             })
-        })
+        else {
+            res.json({
+                code: 9999,
+                message: "Loi tham so"
+            })
+        }
     }
 })
 
@@ -285,17 +300,27 @@ router.route('/check_code_exam').post((req, res) => {
         message: "loi  xac thuc"
     })
     else {
-
-        Exam.find({
-            _id: req.body.code
-        }).select('questions').exec((err, re) => {
-            if (err) throw err;
-            else res.json({
-                code: 1000,
-                message: "ok",
-                data: re
+        if (req.body.code.match(/^[0-9a-fA-F]{24}$/))
+            Exam.find({
+                _id: req.body.code
+            }).select('questions').exec((err, re) => {
+                if (err) throw err;
+                if (re.length == 1) res.json({
+                    code: 1000,
+                    message: "ok",
+                    data: re
+                })
+                else res.json({
+                    code: 9999,
+                    message: "loi tham so"
+                })
             })
+        else res.json({
+            code: 9999,
+            message: "loi tham so"
         })
+
+
 
     }
 })
