@@ -262,7 +262,11 @@ router.route('/check_result').post((req, res) => {
             if (err) throw err;
             let resu = 0;
             for (let i = 0; i < 50; i++) {
-                try { if (req.body.result[i].id == ok[0].correct_answer[i].id && req.body.result[i].answer == ok[0].correct_answer[i].correct_answer) resu++ }
+
+                try {
+                   
+                    if (req.body.result[i].answer.split(" :")[1] == ok[0].correct_answer[i].correct_answer) resu++
+                }
                 catch (err) {
 
                 }
