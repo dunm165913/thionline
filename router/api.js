@@ -247,36 +247,50 @@ router.route('/test').post((req, res) => {
     console.log(exam)
     res.json({})
 })
+
+router.route('/check_result').post((req, res) => {
+    if (!req.userData) {
+        res.json({
+            code: 9999,
+            message: "ko xac thuc dc"
+        })
+    }
+    else {
+        Exam.find({
+            _id: req.body.id_exam
+        }).select('correct_answer').exec((err, ok) => {
+            if (err) throw err;
+            let resu = 0;
+            for (let i = 0; i < 50; i++) {
+                try { if (req.body.result[i].id == ok[0].correct_answer[i].id && req.body.result[i].answer == ok[0].correct_answer[i].correct_answer) resu++ }
+                catch (err) {
+
+                }
+            }
+            res.json({
+                code: 1000,
+                message: resu + "/50"
+            })
+        })
+    }
+})
+
 router.route('/check_code_exam').post((req, res) => {
     if (!req.userData) res.json({
         code: 9999,
         message: "loi  xac thuc"
     })
     else {
-        console.log(req.body)
 
         Exam.find({
-          _id: req.body.code
-        }, (err, re) => {
-            console.log(re)
-            if (err)
-            res.json({
-                code: 9999,
-                message: " ma de thi ko hop le"
+            _id: req.body.code
+        }).select('questions').exec((err, re) => {
+            if (err) throw err;
+            else res.json({
+                code: 1000,
+                message: "ok",
+                data: re
             })
-            else if (re) {
-                res.json({
-                    code: 1000,
-                    message: "ok"
-
-                })
-            }
-            else {
-                res.json({
-                    code: 9999,
-                    message: "Khong ton tai de thi nay"
-                })
-            }
         })
 
     }
