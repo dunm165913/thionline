@@ -110,13 +110,18 @@ router.route('/signup').post((req, res) => {
 
 })
 //3 create size question level 
-router.route("/question_level").post((req, res) => {
+router.route("/get_question").post((req, res) => {
 
     console.log(req.body)
-    if (req.userData && req.body.size && req.body.level)
         Question.aggregate([
-            { $match: { level: req.body.level } }, // filter the results
-            { $sample: { size: parseInt(req.body.size) } } // You want to get 5 docs
+            {
+                $match: {
+                    level: req.body.level?req.body.level:"1",
+                    class: req.body.class ? req.body.class : "12",
+                    subject: req.body.subject ? req.body.subject : "Toan"
+                }
+            }, // filter the results
+            { $sample: { size: parseInt(req.body.size)?parseInt(req.body.size):1 } } // You want to get 5 docs
         ]).exec((err, ok) => {
             if (err) res.json({ code: 9991, message: "loi", data: [] })
             console.log(ok);
@@ -125,12 +130,7 @@ router.route("/question_level").post((req, res) => {
                 message: "ok",
                 data: ok
             })
-        });
-    else res.json({
-        code: 9999,
-        message: "Co loi",
-        data: []
-    })
+        }); 
 })
 
 
@@ -213,15 +213,7 @@ router.route('/created_exam_fee').post((req, res) => {
         })
     }
 })
-router.route('/next_question').post((req, res) => {
-    Question.aggregate([{ $sample: { size: 1 } }]).exec((err, ok) => {
-        res.json({
-            code: 1000,
-            message: "ok",
-            data: ok
-        })
-    })
-})
+
 
 router.route('/check_question').post((req, res) => {
     let a = req.body.answer
@@ -317,7 +309,7 @@ router.route('/check_code_exam').post((req, res) => {
             })
         else res.json({
             code: 9999,
-            message: "loi tham so"
+            message: "loi tham so code"
         })
 
 

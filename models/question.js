@@ -17,6 +17,9 @@ var questionSchema = new mongoose.Schema({
     },
     subject:{
         type:String
+    },
+    class:{
+        type:String
     }
 });
 module.exports = mongoose.model('questions', questionSchema);
