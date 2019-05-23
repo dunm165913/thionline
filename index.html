@@ -1,29 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>create question </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+        integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
-    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.js"></script>
 </head>
+
 <body>
-    <button id="getToken">token</button>
-    <button id="outToken">get token</button>
-    <h3 id="as"></h3>
-    <h3 id="token"></h3>
+    <div class="container">
+
+        <h1>create question</h1>
+        <div style="display: flex">
+            <label style="margin: 10px;width:150px ;margin:20px">Question</label>
+            <textarea name="" id="question" cols="60" rows="10" style="width:100%;"></textarea>
+        </div>
+        <div style="display: flex;margin:20px">
+            <label style="margin: 10px;width:150px">option</label>
+            <div style="margin: 10px">
+                <label style="width: 100px">level</label>
+                <select id="level">
+                    <option value="1">level 1( easyles )</option>
+                    <option value="2">Level 2( medium )</option>
+                    <option value="3">level 3( hard )</option>
+                </select>
+            </div>
+            <div style="margin: 10px">
+                <label style="width: 100px">class</label>
+                <select id="class">
+                    <option value="10">class 10</option>
+                    <option value="11">class 11</option>
+                    <option value="12">class 12</option>
+                </select>
+            </div>
+            <div style="margin: 10px">
+                <label style="width: 100px">Subject</label>
+                <select id="subject">
+                    <option value="Toan">Toan</option>
+                    <option value="Ly">ly</option>
+                    <option value="Hoa">hoa</option>
+                </select>
+            </div>
+
+        </div>
+        <div style="display: flex;margin:20px">
+            <label style="margin: 10px;width:150px">answer</label>
+            <div style="display: flex">
+                <div style="display: flex">
+                    <label style="margin: 10px">A</label>
+                    <textarea name="" id="A" cols="20" rows="1" style="width:100%;"></textarea>
+                </div>
+                <div style="display: flex">
+                    <label style="margin: 10px">B</label>
+                    <textarea name="" id="B" cols="20" rows="1" style="width:100%;"></textarea>
+                </div>
+                <div style="display: flex">
+                    <label style="margin: 10px">C</label>
+                    <textarea name="" id="C" cols="20" rows="1" style="width:100%;"></textarea>
+                </div>
+            </div>
+
+        </div>
+        <div style="display:flex;margin:20px">
+            <lable style="margin: 10px;width:150px">correct_answer</lable>
+            <div style="display: flex">
+
+                <div style="width:100px">
+                    <input id="s1" type="checkbox" value="A">A
+                </div>
+                <div style="width:100px">
+                    <input id="s2" type="checkbox" value="B">B
+                </div>
+                <div style="width:100px">
+                    <input id="s3" type="checkbox" value="C">C
+                </div>
+            </div>
+        </div>
+
+        <div onclick="s()" style="text-align: center" id="submit">Submit</div>
+        <div id="message" style="text-align: center"></div>
+    </div>
+    <style>
+        #submit:hover {
+            cursor: pointer;
+        }
+    </style>
     <script>
-        document.getElementById("getToken").addEventListener("click",(e)=>{
-            axios.post("/abc",{
-                username:"Du",
-                password:"abc",
-            }).then((res)=>{
-                localStorage.setItem("token",res.data.token)
-            });
-        });
-        document.getElementById("outToken").addEventListener("click",(e)=>{
-            document.getElementById("as").innerHTML = localStorage.getItem("token");
-        });
+        function s() {
+            let question = $('#question').val()
+            let level = $('#level').find(':selected').val()
+            let classes = $('#class').find(':selected').val()
+            let subject = $('#subject').find(':selected').val()
+            let answer = [{ A: $('#A').val() }, { B: $('#B').val() }, { C: $('#C').val() }]
+            let correct_answer = ''
+
+            if ($('#s1').is(":checked"))
+                correct_answer = answer[0].A
+            else
+                if ($('#s2').is(":checked"))
+                    correct_answer = answer[1].B
+                else
+                    if ($('#s3').is(":checked")) correct_answer = answer[2].C
+            console.log(correct_answer)
+            axios.post('/api/create_question', { question, level, classes, subject, answer, correct_answer }).then(re => {
+                console.log(re)
+                $('#question').val("")
+                $('#A').val("")
+                $('#B').val("")
+                 $('#C').val("")
+                $('#message').html('<span>'+re.data.message+'</span>')
+            })
+
+
+        }
     </script>
 </body>
+
 </html>

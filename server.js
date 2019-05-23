@@ -28,7 +28,9 @@ mongoose.connect("mongodb://du.nm165913:du20091998@ds213896.mlab.com:13896/thion
     });
 
 
-
+app.get('/',(req,res)=>{
+    res.sendFile(__dirname+'/index.html')
+})
 const api = require('./router/api');
 app.use('/api', api);
 

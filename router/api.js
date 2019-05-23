@@ -135,23 +135,26 @@ router.route("/get_question").post((req, res) => {
 
 
 router.route('/create_question').post((req, res) => {
-    if (req.body.question && req.body.correct_answer && req.body.answer && req.body.subject && req.body.level) {
+    console.log(req.body)
+    if (req.body.question.length>0 && req.body.correct_answer.length>0 && req.body.answer.length==3 && req.body.subject && req.body.level) {
         let que = new Question();
         let a = req.body.answer
 
         que.question = req.body.question;
         que.correct_answer = req.body.correct_answer;
-
-        que.create_at = new Date();
+        que.answer=req.body.answer,
+        que.class=req.body.classes
         que.subject = req.body.subject;
         que.level = req.body.level;
+        que.create_at = new Date();
+       
         console.log(que)
-        // que.save((err) => {
-        //     console.log(err);
-        //     res.json({
-        //         message: "ok"
-        //     })
-        // });
+        que.save((err) => {
+            console.log(err);
+            res.json({
+                message: "ok"
+            })
+        });
 
     } else {
         res.json({
