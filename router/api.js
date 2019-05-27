@@ -221,6 +221,7 @@ router.route('/created_exam_fee').post((req, res) => {
 
 
 router.route('/check_question').post((req, res) => {
+    if(!req.body.answer) req.body.answer="A :___________________________________"
     let a = req.body.answer
     a = a.split(' :')
     Question.findOne({
