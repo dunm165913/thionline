@@ -139,7 +139,9 @@ router.route('/create_question').post((req, res) => {
     if (req.body.question.length>0 && req.body.correct_answer.length>0 && req.body.answer.length==3 && req.body.subject && req.body.level) {
         let que = new Question();
         let a = req.body.answer
-
+if(req.body.image.length>10){
+    que.url=req.body.image
+}
         que.question = req.body.question;
         que.correct_answer = req.body.correct_answer;
         que.answer=req.body.answer,

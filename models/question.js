@@ -20,6 +20,9 @@ var questionSchema = new mongoose.Schema({
     },
     class:{
         type:String
+    },
+    url:{
+        type:String
     }
 });
 module.exports = mongoose.model('questions', questionSchema);

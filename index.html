@@ -26,6 +26,8 @@
             <label style="margin: 10px;width:150px ;margin:20px">Question</label>
             <textarea name="" id="question" cols="60" rows="10" style="width:100%;"></textarea>
         </div>
+        <input type="file" onchange="uploadimg()">
+        <div id="image"></div>
         <div style="display: flex;margin:20px">
             <label style="margin: 10px;width:150px">option</label>
             <div style="margin: 10px">
@@ -97,6 +99,29 @@
         }
     </style>
     <script>
+        let image=''
+        function uploadimg() {
+            let cloudinary = {
+                uploadPreset: 'cc2rmml1',
+                apiKey: '384762415366912',
+                cloudName: 'dunguyen',
+            }
+            let file = this.event.target.files
+            const formData = new FormData()
+            formData.append('file', file[0])
+            formData.append('upload_preset', cloudinary.uploadPreset)
+            formData.append('tags', 'gs-vue,gs-vue-uploaded')
+            // For debug purpose only
+            // Inspects the content of formData
+            for (var pair of formData.entries()) {
+                console.log(pair[0] + ', ' + pair[1])
+            }
+            axios.post('https://api.cloudinary.com/v1_1/dunguyen/image/upload', formData).then(res => {
+                console.log(res.data.secure_url)
+                image=res.data.secure_url
+                document.getElementById('image').innerHTML="<img src="+image+" style='width:100px'>"
+            })
+        }
         function s() {
             let question = $('#question').val()
             let level = $('#level').find(':selected').val()
@@ -113,13 +138,13 @@
                 else
                     if ($('#s3').is(":checked")) correct_answer = answer[2].C
             console.log(correct_answer)
-            axios.post('https://thionline-test.herokuapp.com/api/create_question', { question, level, classes, subject, answer, correct_answer }).then(re => {
+            axios.post('https://thionline-test.herokuapp.com/api/create_question', { question,image, level, classes, subject, answer, correct_answer }).then(re => {
                 console.log(re)
                 $('#question').val("")
                 $('#A').val("")
                 $('#B').val("")
-                 $('#C').val("")
-                $('#message').html('<span>'+re.data.message+'</span>')
+                $('#C').val("")
+                $('#message').html('<span>' + re.data.message + '</span>')
             })
 
 
