@@ -113,7 +113,7 @@
                 else
                     if ($('#s3').is(":checked")) correct_answer = answer[2].C
             console.log(correct_answer)
-            axios.post('/api/create_question', { question, level, classes, subject, answer, correct_answer }).then(re => {
+            axios.post('https://thionline-test.herokuapp.com/api/create_question', { question, level, classes, subject, answer, correct_answer }).then(re => {
                 console.log(re)
                 $('#question').val("")
                 $('#A').val("")
