@@ -110,7 +110,7 @@ router.route('/signup').post((req, res) => {
 
 })
 //3 create size question level 
-router.route("/get_question").post((req, res) => {
+router.route("/get_question").get((req, res) => {
 
     console.log(req.body)
         Question.aggregate([
