@@ -11,7 +11,7 @@ app.set('view engine', 'ejs');
 
 
 
-app.use(auth);
+//app.use(auth);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
